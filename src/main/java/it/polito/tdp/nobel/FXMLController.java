@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import com.zaxxer.hikari.util.ClockSource.NanosecondClockSource;
+
 import it.polito.tdp.nobel.model.Esame;
 import it.polito.tdp.nobel.model.Model;
 import javafx.event.ActionEvent;
@@ -36,7 +38,18 @@ public class FXMLController {
     void doCalcolaCombinazione(ActionEvent event) {
     		try {
     			int numeroCrediti = Integer.parseInt(txtInput.getText());
+    			Long start = System.nanoTime();
     			Set<Esame> voti = model.calcolaSottoinsiemeEsami(numeroCrediti);
+    			Long stop = System.nanoTime();
+    			if(voti == null)
+    			{txtResult.appendText("Non ho trovato soluzioni" +"\n");}
+    			txtResult.appendText("Tempo : "+ (stop-start) +"\n");
+    			txtResult.appendText("Media : "+ this.model.calcolaMedia(voti)+"\n");
+    			for(Esame e : voti)
+
+    			{
+    				txtResult.appendText(e.toString()+"\n");
+    			}
     			
     		} catch (NumberFormatException e) {
     			txtResult.setText("Inserire un numero di crediti > 0");
